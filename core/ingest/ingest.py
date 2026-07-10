@@ -1,5 +1,6 @@
 # System imports
 from os import path
+import time
 
 # Local imports
 from core.utils.console import console
@@ -7,8 +8,6 @@ from core.database.controler import database_controler
 
 class Ingest():
     
-
-
     def import_nginx_logfile(self, filepath: str) -> bool:
         from core.normalizer.nginx_normalizer import NginxNormalizer
         
@@ -29,13 +28,23 @@ class Ingest():
 
         console.print(f"[blue][*] Importing logs from nginx log file {filepath}[/blue]")
 
-        for line in fd.readlines():
+        start_time = time.time()
+
+        for line in fd:
             normalized_log = normalizer.normalize_log(line)
             if (normalized_log != {}):
                 normalized_log["raw_log"] = line.strip()
                 normalized_log["log_type"] = "nginx"
+                # Insert log don't commit to the database.
                 database_controler.insert_log(normalized_log)
                 line_count += 1
+
+        # Commit the changes to the database (only once at the end to improve performance)
+        database_controler.commit()
+
+        end_time = time.time()
+
+        console.print(f"[blue][*] Import completed in {end_time - start_time:.2f} seconds[/blue]")
 
         console.print(f"[green][*] {line_count} log entries imported from {filepath}[/green]")
         return (True)

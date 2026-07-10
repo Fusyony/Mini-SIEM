@@ -16,6 +16,7 @@ class Controler:
             self.create_database()
 
         self.connection = self.create_connection()
+        self.cursor = self.connection.cursor()
 
     def create_database(self):
         open(self.db_location, "x").close()
@@ -52,26 +53,25 @@ class Controler:
         return sqlite3.connect(self.db_location)
 
     def insert_log(self, data: dict):
-        with self.connection:
-            cursor = self.connection.cursor()
-            cursor.execute(
-                """
-                INSERT INTO logs (source_ip, destination_ip, user, protocole, status_code, timestamp, message, log_type, raw_log)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    data.get("source_ip"),
-                    data.get("destination_ip"),
-                    data.get("user"),
-                    data.get("protocole"),
-                    data.get("status_code"),
-                    data.get("timestamp"),
-                    data.get("message"),
-                    data.get("log_type"),
-                    data.get("raw_log")
-                )
+        self.cursor.execute(
+            """
+            INSERT INTO logs (source_ip, destination_ip, user, protocole, status_code, timestamp, message, log_type, raw_log)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                data.get("source_ip"),
+                data.get("destination_ip"),
+                data.get("user"),
+                data.get("protocole"),
+                data.get("status_code"),
+                data.get("timestamp"),
+                data.get("message"),
+                data.get("log_type"),
+                data.get("raw_log")
             )
-            self.connection.commit()
+        )
 
+    def commit(self):
+        self.connection.commit()
 
 database_controler = Controler()

@@ -3,7 +3,6 @@ import re
 class NginxNormalizer():
 
     def __init__(self) -> None:
-
         IP = r"(?P<source_ip>\d+\.\d+\.\d+\.\d+)"
         DATE = r"(?P<timestamp>[^]]+)"
         METHODE = r"(?P<methode>GET|POST|PUT|DELETE|HEAD|OPTIONS)"
@@ -13,6 +12,7 @@ class NginxNormalizer():
         SIZE = r"(?P<size>\d+)"
 
         self.regex = re.compile(rf"""
+            ^
             {IP}
             \s+-\s+-\s+\[
             {DATE}
@@ -30,7 +30,7 @@ class NginxNormalizer():
     
     def normalize_log(self, log : str) -> dict:
         
-        match = re.search(self.regex, log)
+        match = self.regex.match(log)
         if match:
             return match.groupdict()
         return ({})
