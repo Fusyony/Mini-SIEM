@@ -219,3 +219,4 @@ __marimo__/
 
 # SQLite database files
 database/database.db
+data/tmp

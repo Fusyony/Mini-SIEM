@@ -1,6 +1,4 @@
 from core.cli.cli import app
-from core.database.controler import Controler
-
-database_controler = Controler()
+from core.database.controler import database_controler
 
 app()
