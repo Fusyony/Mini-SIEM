@@ -52,6 +52,7 @@ class Controler:
     def create_connection(self) -> sqlite3.Connection:
         return sqlite3.connect(self.db_location)
 
+    # [TODO] move this to the ingest command file
     def insert_log(self, data: dict):
         self.cursor.execute(
             """
@@ -71,7 +72,13 @@ class Controler:
             )
         )
 
-    def commit(self):
+    def run_sql(self, sql_command) -> None:        
+        self.cursor.execute(sql_command)
+  
+    def fetchall(self) -> list:
+        return self.cursor.fetchall()
+
+    def commit(self) -> None:
         self.connection.commit()
 
 database_controler = Controler()

@@ -28,8 +28,6 @@ class Ingest():
 
         console.print(f"[blue][*] Importing logs from nginx log file {filepath}[/blue]")
 
-        start_time = time.time()
-
         for line in fd:
             normalized_log = normalizer.normalize_log(line)
             if (normalized_log != {}):
@@ -41,10 +39,6 @@ class Ingest():
 
         # Commit the changes to the database (only once at the end to improve performance)
         database_controler.commit()
-
-        end_time = time.time()
-
-        console.print(f"[blue][*] Import completed in {end_time - start_time:.2f} seconds[/blue]")
 
         console.print(f"[green][*] {line_count} log entries imported from {filepath}[/green]")
         return (True)

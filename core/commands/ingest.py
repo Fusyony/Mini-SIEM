@@ -1,3 +1,4 @@
+# Local import
 from core.cli.cli import app
 from core.utils.console import console
 from core.ingest.ingest import Ingest
