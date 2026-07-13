@@ -34,7 +34,7 @@ class Ingest():
                 normalized_log["raw_log"] = line.strip()
                 normalized_log["log_type"] = "nginx"
                 # Insert log don't commit to the database.
-                database_controler.insert_log(normalized_log)
+                self.insert_log(normalized_log)
                 line_count += 1
 
         # Commit the changes to the database (only once at the end to improve performance)
@@ -42,4 +42,22 @@ class Ingest():
 
         console.print(f"[green][*] {line_count} log entries imported from {filepath}[/green]")
         return (True)
-    
+
+    def insert_log(self, data : dict) -> None:
+        database_controler.run_sql(
+            """
+            INSERT INTO logs (source_ip, destination_ip, user, protocole, status_code, timestamp, message, log_type, raw_log)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                data.get("source_ip"),
+                data.get("destination_ip"),
+                data.get("user"),
+                data.get("protocole"),
+                data.get("status_code"),
+                data.get("timestamp"),
+                data.get("message"),
+                data.get("log_type"),
+                data.get("raw_log")
+            )
+        )

@@ -6,7 +6,6 @@ from core.cli.cli import app
 from core.utils.console import console
 from core.database.controler import database_controler
 
-
 @app.command()
 def status() -> None:
     display_banner()

@@ -14,3 +14,4 @@ def ingest(type : str, logfile: str) -> None:
         case _:
             console.print(f"[red][!] Unkown type {type}, possible parameters are:[/red]")
             console.print(f"[red]\t - nginx[/red]")
+

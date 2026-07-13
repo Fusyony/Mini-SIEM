@@ -52,28 +52,11 @@ class Controler:
     def create_connection(self) -> sqlite3.Connection:
         return sqlite3.connect(self.db_location)
 
-    # [TODO] move this to the ingest command file
-    def insert_log(self, data: dict):
-        self.cursor.execute(
-            """
-            INSERT INTO logs (source_ip, destination_ip, user, protocole, status_code, timestamp, message, log_type, raw_log)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                data.get("source_ip"),
-                data.get("destination_ip"),
-                data.get("user"),
-                data.get("protocole"),
-                data.get("status_code"),
-                data.get("timestamp"),
-                data.get("message"),
-                data.get("log_type"),
-                data.get("raw_log")
-            )
-        )
-
-    def run_sql(self, sql_command) -> None:        
-        self.cursor.execute(sql_command)
+    def run_sql(self, sql_command, parameters = {}) -> None:        
+        if (parameters):
+            self.cursor.execute(sql_command, parameters)
+        else:
+            self.cursor.execute(sql_command)
   
     def fetchall(self) -> list:
         return self.cursor.fetchall()
