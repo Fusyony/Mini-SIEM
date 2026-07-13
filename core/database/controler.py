@@ -5,8 +5,12 @@ import pathlib
 # Local import
 from core.utils.console import console
 
+
 class Controler:
-    
+    """
+    Controler class, manage and provide access to the sqlite database.
+    """
+
     def __init__ (self):
         self.db_name = "database.db"
         self.db_location = self.get_database_location()

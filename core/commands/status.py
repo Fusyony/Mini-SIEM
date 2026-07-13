@@ -8,6 +8,9 @@ from core.database.controler import database_controler
 
 @app.command()
 def status() -> None:
+    """
+    Display logs and database infos.
+    """
     display_banner()
     display_logs_count()
     display_top_ip()
